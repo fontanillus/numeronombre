@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es ">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calcular Número del Nombre</title>
+ <link rel="stylesheet" href="./css/estilos.css">
+ <link rel="shortcut icon" href="img/nombre.jpg" type="image/x-icon">
+</head>
+
+<body>
+  <p>
+    <img src="./img/nombre.jpg" alt="foto">
+  </p>
+  <h1>Numerología</h1>
+  <div class="container">
+    <label for="nombreCompleto">Escribe tu nombre completo:</label>
+    <input id="nombreCompleto" type="text" placeholder="Nombre y apellidos" required>
+    <button type="button" onclick="calcularNumeroNombre()">Calcular</button>
+    <button type="button" onclick="mostrarPersonalidad()" class="diseño">(personalidad)</button>
+    <span id="resultado"></span>
+    <span id="personalidad"></span>
+  </div>
+
+  <script src="./js/nombre.js"></script>
+  
+  <script>
+    let ultimoNumeroNombre = null;
+    let ultimaPersonalidad = null;
+
+    const mapaNumerologico = {//valores de las letras
+      A: 1, J: 1, S: 1,
+      B: 2, T: 2,
+      C: 3, Ç: 3, L: 3, U: 3,
+      D: 4, M: 4,
+      E: 5, N: 5, Ñ: 5, W: 5,
+      F: 6, O: 6, X: 6,
+      G: 7, P: 7, Y: 7,
+      H: 8, Q: 8, Z: 8,
+      I: 9, R: 9,
+      K: 11,
+      V: 22
+    };
+
+
+    function calcularNumeroNombre() {
+      const input = document.getElementById('nombreCompleto').value.toUpperCase().replace(/[^A-ZÑÇ]/g, '');
+      //document.getElementById('nombreCompleto').value: obtiene el valor del input con id nombreCompleto.
+      //.toUpperCase(): lo convierte a mayúsculas.
+      //replace(/[^A-ZÑÇ]/g, ''): elimina cualquier carácter que no sea una letra mayúscula (incluyendo Ñ y Ç), espacio en blanco, simbolos,etc.
+      let suma = 0;
+
+      for (let i = 0; i < input.length; i++) {
+        let letra = input[i];
+        if (mapaNumerologico[letra]) {
+          suma += mapaNumerologico[letra];
+        }
+      }
+
+      let numeroNombre = reducirNumero(suma);
+      const info = numerosNombre.find(item => item.numero === numeroNombre);
+
+      ultimoNumeroNombre = numeroNombre;
+      ultimaPersonalidad = info ? info.personalidad : null;
+
+      document.getElementById('resultado').innerHTML = `<span style="color: red; font-size: 20px;">${numeroNombre}. Número nombre</span>`;
+      document.getElementById('personalidad').innerHTML = '';
+    }
+
+    function reducirNumero(num) {
+      const maestros = [11, 22];
+
+      while (num > 9 && !maestros.includes(num)) {
+        let suma = 0;
+        num.toString().split('').forEach(dig => suma += parseInt(dig));
+        num = suma;
+      }
+
+      return num;
+    }
+
+    function mostrarPersonalidad() {
+      if (ultimoNumeroNombre === null) {
+        alert('Primero debes calcular tu número de nombre.');
+        return;
+      }
+
+      if (ultimaPersonalidad) {
+        document.getElementById('personalidad').innerHTML =
+          `<span style="color: blue; font-size: 14px;">Personalidad: ${ultimaPersonalidad}</span>`;
+      } else {
+        document.getElementById('personalidad').innerHTML =
+          'No hay personalidad disponible para este número.';
+      }
+
+      console.log("Numero nombre:", ultimoNumeroNombre);
+      console.log("Personalidad:", ultimaPersonalidad || "No hay personalidad disponible.");
+    }
+  </script>
+</body>
+
+</html>
